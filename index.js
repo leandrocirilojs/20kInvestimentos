@@ -1,36 +1,58 @@
-// Definição dos valores para os quadrados
-const numeroQuadrados = 200;
-const valorTotal = 20000;
-const valoresQuadrados = [];
-const container = document.getElementById("container");
-const totalInvestido = document.getElementById("total");
+// Senha definida no sistema
+const senhaCorreta = "123456"; // Você pode mudar a senha para a que preferir
 
-// Distribuição fixa de valores para garantir a soma de 20.000 reais
-const distribuicaoValores = [5, 10, 15, 20, 30, 50, 100, 200, 400, 300];
+// Função para verificar a senha
+function checkPassword() {
+    const senhaInput = document.getElementById("password").value;
+    const errorMessage = document.getElementById("errorMessage");
+    const loginScreen = document.getElementById("loginScreen");
+    const contentScreen = document.getElementById("contentScreen");
 
-// Contagem de quadrados para cada valor
-const distribuicaoQuantidades = {
-    5: 20,
-    10: 20,
-    15: 20,
-    20: 20,
-    30: 20,
-    50: 20,
-    100: 20,
-    200: 20,
-    400: 20,
-    300: 20
-};
-
-// Gerar os valores fixos conforme a distribuição
-for (let valor of distribuicaoValores) {
-    for (let i = 0; i < distribuicaoQuantidades[valor]; i++) {
-        valoresQuadrados.push(valor);
+    if (senhaInput === senhaCorreta) {
+        // Se a senha estiver correta, exibe o conteúdo e esconde a tela de login
+        loginScreen.style.display = "none";
+        contentScreen.style.display = "block";
+    } else {
+        // Senha incorreta, exibe uma mensagem de erro
+        errorMessage.style.display = "block";
     }
 }
 
+// O restante do código da sua aplicação
+const numeroQuadrados = 200;
+const valoresPossiveis = [5, 10, 20, 50, 100, 200, 300, 400];
+const valorTotal = 20000;
+const container = document.getElementById("container");
+const totalInvestido = document.getElementById("total");
+
+// Função para gerar valores fixos
+function gerarValoresFixos() {
+    let valores = [];
+    let soma = 0;
+
+    while (valores.length < numeroQuadrados - 1) {
+        let valor = valoresPossiveis[Math.floor(Math.random() * valoresPossiveis.length)];
+        if (soma + valor > valorTotal) break;
+        valores.push(valor);
+        soma += valor;
+    }
+
+    // Adiciona o último valor para completar o total
+    valores.push(valorTotal - soma);
+    return valores;
+}
+
+// Verifica se os valores já existem no localStorage
+let valoresQuadrados = JSON.parse(localStorage.getItem("valoresQuadrados"));
+
+// Se não existirem, gera os valores e salva no localStorage
+if (!valoresQuadrados || valoresQuadrados.length !== numeroQuadrados) {
+    valoresQuadrados = gerarValoresFixos();
+    localStorage.setItem("valoresQuadrados", JSON.stringify(valoresQuadrados));
+}
+
 // Recupera os quadrados marcados do localStorage
-let quadradosMarcados = JSON.parse(localStorage.getItem("quadradosMarcados")) || [];
+const quadradosMarcados = JSON.parse(localStorage.getItem("quadradosMarcados")) || [];
 
 // Renderiza os quadrados
 valoresQuadrados.forEach((valor, index) => {
@@ -44,7 +66,7 @@ valoresQuadrados.forEach((valor, index) => {
         quadrado.classList.add("marcado");
     }
 
-    // Adiciona o evento de clique para marcar/desmarcar
+    // Adiciona o evento de clique
     quadrado.addEventListener("click", function () {
         if (quadrado.classList.contains("marcado")) {
             quadrado.classList.remove("marcado");
@@ -68,5 +90,4 @@ function atualizarTotal() {
     totalInvestido.textContent = total.toFixed(2);
 }
 
-// Atualiza o total investido inicialmente
 atualizarTotal();
