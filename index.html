@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicação de Investimento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: auto;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 50px;
+        }
+
+        h2 {
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 8px;
+            width: 95%;
+            max-width: 900px;
+        }
+
+        .quadrado {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            user-select: none;
+            border-radius: 10px;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .quadrado:hover {
+            transform: scale(1.05);
+            box-shadow: 4px 4px 12px rgba(255, 152, 0, 0.5);
+        }
+
+        .quadrado.marcado {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            transform: scale(1.1);
+            box-shadow: 4px 4px 12px rgba(76, 175, 80, 0.7);
+        }
+
+        .info {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            text-align: center;
+            width: 250px;
+            color: black;
+            font-weight: bold;
+        }
+
+        /* Responsividade */
+        @media (min-width: 600px) {
+            .container {
+                grid-template-columns: repeat(8, 1fr);
+            }
+        }
+
+        @media (min-width: 900px) {
+            .container {
+                grid-template-columns: repeat(10, 1fr);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <h2>Investir em 200X</h2>
+
+    <div class="container" id="container"></div>
+    <div class="info">
+        <p>Total Investido: R$ <span id="total">0</span></p>
+    </div>
+
+    <script>
+        const numeroQuadrados = 200;
+        const valoresPossiveis = [5, 10, 20, 50, 100, 200, 300, 400];
+        const valorTotal = 20000;
+        const container = document.getElementById("container");
+        const totalInvestido = document.getElementById("total");
+
+        function gerarValoresFixos() {
+            let valores = [];
+            let soma = 0;
+
+            while (valores.length < numeroQuadrados - 1) {
+                let valor = valoresPossiveis[Math.floor(Math.random() * valoresPossiveis.length)];
+                if (soma + valor > valorTotal) break;
+                valores.push(valor);
+                soma += valor;
+            }
+
+            valores.push(valorTotal - soma); 
+            return valores;
+        }
+
+        let valoresQuadrados = JSON.parse(localStorage.getItem("valoresQuadrados"));
+        if (!valoresQuadrados || valoresQuadrados.length !== numeroQuadrados) {
+            valoresQuadrados = gerarValoresFixos();
+            localStorage.setItem("valoresQuadrados", JSON.stringify(valoresQuadrados));
+        }
+
+        const quadradosMarcados = JSON.parse(localStorage.getItem("quadradosMarcados")) || [];
+
+        valoresQuadrados.forEach((valor, index) => {
+            const quadrado = document.createElement("div");
+            quadrado.classList.add("quadrado");
+            quadrado.setAttribute("data-valor", valor);
+            quadrado.textContent = `R$ ${valor}`;
+
+            if (quadradosMarcados.includes(index)) {
+                quadrado.classList.add("marcado");
+            }
+
+            quadrado.addEventListener("click", function () {
+                if (quadrado.classList.contains("marcado")) {
+                    quadrado.classList.remove("marcado");
+                    quadradosMarcados.splice(quadradosMarcados.indexOf(index), 1);
+                } else {
+                    quadrado.classList.add("marcado");
+                    quadradosMarcados.push(index);
+                }
+
+                localStorage.setItem("quadradosMarcados", JSON.stringify(quadradosMarcados));
+                atualizarTotal();
+            });
+
+            container.appendChild(quadrado);
+        });
+
+        function atualizarTotal() {
+            let total = quadradosMarcados.reduce((acc, index) => acc + valoresQuadrados[index], 0);
+            totalInvestido.textContent = total.toFixed(2);
+        }
+
+        atualizarTotal();
+    </script>
+
+</body>
+</html>
