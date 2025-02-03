@@ -94,20 +94,7 @@ h2 {
     animation: pulsar 2s infinite alternate, brilho 1s infinite alternate, explosao 0.5s ease-out;
 }
 
-.info {
-    position: fixed;
-    transform: translateX(-50%);
-    background-color: white;
-    padding: 4px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-size: 14px;
-    text-align: center;
-    width: 1000px;
-    z-index: 9999;
-    color: black;
-    font-weight: bold;
-}
+
 
 @media (min-width: 600px) {
     .container {
