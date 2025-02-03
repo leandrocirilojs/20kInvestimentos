@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplicação de Investimento</title>
-    <link rel="stylesheet" href="index.css" >
-
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Investir em 200X</h2>
-
-    <div class="container" id="container"></div>
-
-    <div class="info">
-        <p>Total Investido: R$ <span id="total">0</span></p>
+    <!-- Tela de Login -->
+    <div id="loginScreen" class="login-screen">
+        <h2>Digite a senha para continuar</h2>
+        <input type="password" id="password" placeholder="Senha">
+        <button onclick="checkPassword()">Entrar</button>
+        <p id="errorMessage" style="color: red; display: none;">Senha incorreta. Tente novamente.</p>
     </div>
 
+    <!-- Tela de conteúdo -->
+    <div id="contentScreen" class="content-screen" style="display: none;">
+        <h2>Investir em 200X</h2>
 
-    <script src="index.js"></script>
+        <div class="container" id="container"></div>
+        <div class="info">
+            <p>Total Investido: R$ <span id="total">0</span></p>
+        </div>
+    </div>
 
+    <script src="script.js"></script>
 </body>
 </html>
