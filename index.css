@@ -120,7 +120,4 @@ h2 {
     .container {
         grid-template-columns: repeat(10, 1fr);
     }
-                              }
-
-
-
+}
