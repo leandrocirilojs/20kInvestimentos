@@ -1,22 +1,5 @@
 // Senha definida no sistema
-const senhaCorreta = "123456"; // Você pode mudar a senha para a que preferir
 
-// Função para verificar a senha
-function checkPassword() {
-    const senhaInput = document.getElementById("password").value;
-    const errorMessage = document.getElementById("errorMessage");
-    const loginScreen = document.getElementById("loginScreen");
-    const contentScreen = document.getElementById("contentScreen");
-
-    if (senhaInput === senhaCorreta) {
-        // Se a senha estiver correta, exibe o conteúdo e esconde a tela de login
-        loginScreen.style.display = "none";
-        contentScreen.style.display = "block";
-    } else {
-        // Senha incorreta, exibe uma mensagem de erro
-        errorMessage.style.display = "block";
-    }
-}
 
 // O restante do código da sua aplicação
 const numeroQuadrados = 200;
